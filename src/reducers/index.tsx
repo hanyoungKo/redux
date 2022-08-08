@@ -1,9 +1,11 @@
 import { combineReducers } from "redux";
-import counter from './counter'
+import counter from './counter';
 import todo from "./todo";
+import posts from './posts';
 const rootReducer = combineReducers({
     counter,
-    todo
+    todo,
+    posts
 })
 
 export default rootReducer;

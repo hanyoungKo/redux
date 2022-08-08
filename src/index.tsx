@@ -4,9 +4,10 @@ import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import {applyMiddleware, createStore} from 'redux';
+// toolkit사용 권장
 import rootReducer from './reducers';
 import { Provider } from 'react-redux';
-// toolkit사용 권장
+import thunk from 'redux-thunk';
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
@@ -20,7 +21,7 @@ const loggeMiddleware =(store:any)=> (next:any)=> (action:any)=>{
   next(action);
 }
 
-const middleware = applyMiddleware(loggeMiddleware)
+const middleware = applyMiddleware(thunk,loggeMiddleware)
 const store = createStore(rootReducer, middleware);
 
 const render = () => root.render(

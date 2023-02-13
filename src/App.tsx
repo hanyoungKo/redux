@@ -1,79 +1,61 @@
-import React,{useState,useEffect} from 'react';
 import './App.css';
-import {useDispatch, useSelector} from 'react-redux';
+import React, {useState} from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from './reducers';
-import { fetchPosts } from './actions/posts';
-
-
 
 /* 타입정의 */
-
 type Props ={
   value: any;
-  onIncrement: ()=> void;
-  onDecrement: ()=> void;
+  onIncrement : () => void;
+  onDecrement : () => void;
 }
 
-interface Post{
-  userId: number;
-  id: number;
-  title: string;
-}
-
-/* ------------------------- */
 
 
-function App({value, onIncrement, onDecrement }:Props) {
-  
+function App( {value, onIncrement , onDecrement}: Props) {
+
+  // state
   const [todoValue, setTodoValue] = useState("");
-  
-  const counter = useSelector((state: RootState)=>state.counter)
-  const todos: string[] = useSelector((state: RootState)=>state.todo) 
-  const posts: Post[] = useSelector((state:RootState)=>state.posts);
 
-  const dispatch = useDispatch();
+  // 관리
+  const counter =  useSelector((state: RootState) => state.counter);
+  const todos = useSelector((state: RootState) => state.todos);
 
-  const handleChange =(e:React.ChangeEvent<HTMLInputElement>)=>{
-        setTodoValue(e.target.value);
-  }
-  const addTodo = (e:React.ChangeEvent<HTMLFormElement>) =>{
+  const dispathch = useDispatch();
+
+  // 핸들링
+  const handleChange = (e : React.ChangeEvent<HTMLInputElement>)=>{
+    setTodoValue(e.target.value);
+
+  } 
+
+  const addTodo = (e:React.FormEvent<HTMLFormElement>) =>{
     e.preventDefault();
-    dispatch({type:"ADD_TODO", text : todoValue})
-    setTodoValue("");
+    dispathch({type:"ADD_TODO", text: todoValue})
+    setTodoValue("")
   }
   
-  useEffect(() => {
-    dispatch(fetchPosts())
-  }, [dispatch])
-
-  
-
-
   return (
-    <div className="App">
-      Clicked: {counter}times
-      <button type='button' onClick={onIncrement}>
-        + 
-      </button>
-      <button type='button' onClick={onDecrement}>
-        -
-      </button>
-      <ul>
-        {todos.map((todo,index)=> <li key={index}>{todo}</li>)}
-      </ul>
+    <div className='App'>
+        Clicked: {counter} times
+        <button onClick={onIncrement}>
+          + 
+        </button>
+        <button onClick={onDecrement}>
+          -
+        </button>
+        <ul>
+          
+          {todos.map((todo,index)=><li key={index}>{todo}</li>)}
+        </ul>
 
-    <form onSubmit={addTodo}>
-      <input type='text' value={todoValue} onChange={handleChange}/>
-      <input type='submit'/>
-    </form>
-
-    <ul>
-        {posts.map((post, index)=>(
-          <li key={index}>{post.title}</li>
-        ))}
-    </ul>
-
+        <form onSubmit={addTodo}>
+          <input type='text' value={todoValue} onChange={handleChange}/>
+          <input type='submit' value='입력' />
+      </form>
     </div>
+
+ 
   );
 }
 

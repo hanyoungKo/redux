@@ -1,43 +1,51 @@
 import React from 'react';
-import ReactDOM from 'react-dom/client';
+import ReactDOM  from 'react-dom/client';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
-import {applyMiddleware, createStore} from 'redux';
-// toolkit사용 권장
+/* redux*/
+import { createStore, applyMiddleware } from 'redux';  
 import rootReducer from './reducers';
+/* react- redux */
 import { Provider } from 'react-redux';
-import thunk from 'redux-thunk';
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
 );
 
-
-
-const loggeMiddleware =(store:any)=> (next:any)=> (action:any)=>{
-  console.log("store",store);
-  console.log("action",action);
+/* 미들웨어 */
+const loggerMiddleware = (store: any) => (next: any) =>(action: any) =>{
+  console.log("store: ", store);
+  console.log("action", action)
   next(action);
 }
 
-const middleware = applyMiddleware(thunk,loggeMiddleware)
-const store = createStore(rootReducer, middleware);
+const middleware =  applyMiddleware(loggerMiddleware)  
+
+/* store */
+const store = createStore(rootReducer,middleware);
+
+// 스토어 생성시 미들웨어를 등록시킴
+
 
 const render = () => root.render(
   <React.StrictMode>
     <Provider store={store}>
+      
     <App 
-    value = {store.getState()}
-    onIncrement = {()=>{store.dispatch({type:"INCREMENT"})}}
-    onDecrement = {()=>{store.dispatch({type:"DECREMENT"})}}
+      value={store.getState()}
+      onIncrement ={()=> store.dispatch({type: "INCREMENT"})}
+      onDecrement = {()=> store.dispatch({type: "DECREMENT"})}
     />
-  </Provider>
+    </Provider>
+
   </React.StrictMode>
 );
 render();
 
 store.subscribe(render);
+
+
 
 // If you want to start measuring performance in your app, pass a function
 // to log results (for example: reportWebVitals(console.log))
